@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Colors — SELVAS AI</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { background: var(--bg-canvas); padding: 56px 64px; margin: 0;
+         max-width: 1320px; }
+  .card-header { padding-bottom: 32px; border-bottom: 1px solid var(--border-default);
+                 margin-bottom: 40px; }
+  .eyebrow { font: 500 12px/1 var(--font-ui); letter-spacing: 0.12em;
+             text-transform: uppercase; color: var(--primary-text); margin: 0 0 12px; }
+  .group-label { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+                 letter-spacing: 0.08em; text-transform: uppercase; margin: 40px 0 14px; }
+  .ramp { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px;
+          margin-bottom: 24px; }
+  .swatch { padding: 14px 10px 12px; border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            min-height: 96px; display: flex; flex-direction: column;
+            justify-content: space-between; }
+  .swatch .step { font: 600 14px/1 var(--font-ui); }
+  .swatch .hex { font: 500 11px/1 var(--font-mono); opacity: 0.85; }
+  .swatch.dark { color: rgba(255,255,255,0.92); }
+  .swatch.tagged { outline: 2px solid var(--fg-default); outline-offset: 2px;
+                   position: relative; }
+  .swatch.tagged::after { content: attr(data-tag); position: absolute;
+                          top: -10px; right: -6px; font: 600 10px/1 var(--font-ui);
+                          background: var(--fg-default); color: var(--fg-inverse);
+                          padding: 4px 6px; border-radius: 3px;
+                          letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .ramp-title { display: flex; align-items: baseline; justify-content: space-between;
+                margin-bottom: 8px; }
+  .ramp-title h3 { margin: 0; font: 700 16px/1 var(--font-ui); color: var(--fg-default); }
+  .ramp-title .desc { font: 400 13px/1 var(--font-ui); color: var(--fg-muted); }
+
+  .legend { display: flex; gap: 16px; font: 500 12px/1 var(--font-ui);
+            color: var(--fg-muted); margin-bottom: 20px; }
+  .legend .pill { padding: 4px 8px; border-radius: 999px;
+                  background: var(--bg-muted); }
+
+  /* ---- Theme block (light vs dark) ---- */
+  .theme-block {
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-2xl);
+    padding: 32px 36px 8px;
+    margin-bottom: 32px;
+  }
+  .theme-block.light { background: #FFFFFF; }
+  .theme-block.dark  { background: #0B1117; color: var(--fg-default); }
+  .theme-block.dark .ramp-title h3 { color: #F1F5F9; }
+  .theme-block.dark .ramp-title .desc { color: #94A3B8; }
+  .theme-block.dark .group-label { color: #94A3B8; }
+  .theme-block.dark .swatch { border-color: rgba(255,255,255,0.08); }
+  .theme-block.dark .swatch.tagged { outline-color: #F1F5F9; }
+  .theme-block.dark .swatch.tagged::after { background: #F1F5F9; color: #0B1117; }
+
+  .theme-head { display: flex; align-items: end; justify-content: space-between;
+                margin-bottom: 20px; }
+  .theme-head h2 { margin: 0; font: 700 22px/1.2 var(--font-display);
+                   letter-spacing: -0.01em; }
+  .theme-head .meta { font: 400 13px/1.5 var(--font-ui);
+                      color: var(--fg-muted); max-width: 540px; }
+  .theme-block.dark .theme-head h2 { color: #F1F5F9; }
+  .theme-block.dark .theme-head .meta { color: #94A3B8; }
+
+  /* Semantic tokens table */
+  .semantic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+                   margin-bottom: 24px; }
+  .token-card {
+    background: rgba(0,0,0,0.025);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .theme-block.dark .token-card { background: rgba(255,255,255,0.04); }
+  .token-card .chip { width: 36px; height: 36px; border-radius: 8px;
+                      border: 1px solid rgba(0,0,0,0.08); flex: none; }
+  .theme-block.dark .token-card .chip { border-color: rgba(255,255,255,0.1); }
+  .token-card .meta-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .token-card .name { font: 600 13px/1.2 var(--font-ui); color: var(--fg-default); }
+  .theme-block.dark .token-card .name { color: #F1F5F9; }
+  .token-card .desc { font: 500 11px/1.2 var(--font-mono); color: var(--fg-muted); }
+  .theme-block.dark .token-card .desc { color: #94A3B8; }
+
+  /* Surface preview tile — shows actual UI mock in each theme */
+  .surface-preview {
+    margin-top: 20px;
+    background: var(--bg-canvas, #fff);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    align-items: center;
+  }
+  .theme-block.light .surface-preview { background: #FFFFFF; border-color: #E2E8F0; }
+  .theme-block.dark  .surface-preview { background: #0F172A; border-color: #1E293B; }
+
+  .preview-title { font: 700 16px/1.3 var(--font-display); margin: 0 0 4px; }
+  .preview-meta  { font: 400 13px/1.4 var(--font-ui); margin: 0; }
+  .theme-block.light .preview-title { color: #020617; }
+  .theme-block.light .preview-meta  { color: #475569; }
+  .theme-block.dark  .preview-title { color: #F1F5F9; }
+  .theme-block.dark  .preview-meta  { color: #94A3B8; }
+
+  .preview-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 36px; padding: 0 16px; font: 500 14px/1 var(--font-ui);
+    border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; gap: 6px;
+  }
+  .theme-block.light .preview-btn.primary  { background: #87C82F; color: #0A0A0A; }
+  .theme-block.light .preview-btn.outline  { background: transparent; border-color: #CBD5E1; color: #020617; }
+  .theme-block.dark  .preview-btn.primary  { background: #9ED14E; color: #0A0A0A; }
+  .theme-block.dark  .preview-btn.outline  { background: transparent; border-color: #334155; color: #F1F5F9; }
+
+  .preview-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font: 500 12px/1 var(--font-ui); padding: 4px 8px; border-radius: 999px;
+  }
+  .theme-block.light .preview-badge { background: #DCFCE7; color: #166534; }
+  .theme-block.dark  .preview-badge { background: rgba(74,222,128,0.16); color: #4ADE80; }
+</style>
+</head>
+<body>
+
+<header class="card-header">
+  <p class="eyebrow">Design System · Colors</p>
+  <h1 class="t-display-sm">색상 체계</h1>
+  <p class="t-body-lg" style="color: var(--fg-muted); margin: 12px 0 0; max-width: 720px;">
+    색상은 사용자의 주의를 유도하고, 기능이나 메시지를 명확히 하여 직관적인
+    사용자 경험을 제공한다.  11-step ramps stay constant across themes; only
+    semantic tokens (canvas/fg/border/primary) flip.  Use
+    <code style="font-size: 12px;">.theme-dark</code> on any container to
+    opt into the dark surface.
+  </p>
+  <div class="legend" style="margin-top: 24px;">
+    <span class="pill">B = Base</span>
+    <span class="pill">T = Text on light</span>
+  </div>
+</header>
+
+<!-- ============================================================ RAMPS -->
+<p class="group-label">Brand</p>
+
+<div class="ramp-title">
+  <h3>Primary &nbsp;<span style="color: var(--primary-text); font-weight:500">— Lime green</span></h3>
+  <span class="desc">Light: 500 base / 600 text · Dark: 400 base / 300 text</span>
+</div>
+<div class="ramp" id="primary"></div>
+
+<div class="ramp-title">
+  <h3>Secondary &nbsp;<span style="color: var(--secondary); font-weight:500">— Slate blue</span></h3>
+  <span class="desc">Light: 700 base · Dark: 400 base</span>
+</div>
+<div class="ramp" id="secondary"></div>
+
+<p class="group-label">Neutrals</p>
+<div class="ramp-title"><h3>Slate gray</h3><span class="desc">Default text + chrome</span></div>
+<div class="ramp" id="slate"></div>
+<div class="ramp-title"><h3>Cool gray</h3><span class="desc">Alternate cool neutral</span></div>
+<div class="ramp" id="coolgray"></div>
+<div class="ramp-title"><h3>Gray</h3><span class="desc">True neutral — utility states</span></div>
+<div class="ramp" id="gray"></div>
+
+<p class="group-label">Semantic</p>
+<div class="ramp-title"><h3>Red &nbsp;<span style="color: var(--destructive); font-weight:500">— Destructive</span></h3><span class="desc">Errors, delete, danger</span></div>
+<div class="ramp" id="red"></div>
+<div class="ramp-title"><h3>Yellow &nbsp;<span style="color: var(--color-yellow-500); font-weight:500">— Warning</span></h3><span class="desc">Pending, attention</span></div>
+<div class="ramp" id="yellow"></div>
+<div class="ramp-title"><h3>Green &nbsp;<span style="color: var(--success); font-weight:500">— Success</span></h3><span class="desc">Confirm, complete</span></div>
+<div class="ramp" id="green"></div>
+<div class="ramp-title"><h3>Blue &nbsp;<span style="color: var(--info); font-weight:500">— Info</span></h3><span class="desc">Informational</span></div>
+<div class="ramp" id="blue"></div>
+
+<!-- ============================================================ THEMES -->
+<p class="group-label" style="margin-top: 64px;">Semantic tokens — Light / Dark</p>
+
+<!-- LIGHT theme block -->
+<div class="theme-block light">
+  <div class="theme-head">
+    <h2>☀ &nbsp;Light theme &nbsp;<span style="color:#94A3B8; font-weight:500;">default</span></h2>
+    <p class="meta">대부분의 화면에서 사용되는 기본 표면. 중성적인 슬레이트 톤 위에 라임을 액센트로 사용한다.</p>
+  </div>
+
+  <div class="semantic-grid">
+    <div class="token-card"><div class="chip" style="background:#FFFFFF; border:1px solid #E2E8F0"></div><div class="meta-text"><span class="name">--bg-canvas</span><span class="desc">#FFFFFF</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#F8FAFC"></div><div class="meta-text"><span class="name">--bg-subtle</span><span class="desc">slate-50</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#F1F5F9"></div><div class="meta-text"><span class="name">--bg-muted</span><span class="desc">slate-100</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#020617"></div><div class="meta-text"><span class="name">--bg-inverse</span><span class="desc">slate-950</span></div></div>
+
+    <div class="token-card"><div class="chip" style="background:#020617"></div><div class="meta-text"><span class="name">--fg-default</span><span class="desc">slate-950</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#475569"></div><div class="meta-text"><span class="name">--fg-muted</span><span class="desc">slate-600</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#64748B"></div><div class="meta-text"><span class="name">--fg-subtle</span><span class="desc">slate-500</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#94A3B8"></div><div class="meta-text"><span class="name">--fg-disabled</span><span class="desc">slate-400</span></div></div>
+
+    <div class="token-card"><div class="chip" style="background:#E2E8F0"></div><div class="meta-text"><span class="name">--border-default</span><span class="desc">slate-200</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#CBD5E1"></div><div class="meta-text"><span class="name">--border-strong</span><span class="desc">slate-300</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#87C82F"></div><div class="meta-text"><span class="name">--primary</span><span class="desc">primary-500</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#384F5E"></div><div class="meta-text"><span class="name">--secondary</span><span class="desc">secondary-700</span></div></div>
+  </div>
+
+  <div class="surface-preview">
+    <div>
+      <p class="preview-title">활성 모델</p>
+      <p class="preview-meta">SELVAS TTS v3.2 · 한국어 자연 발화 엔진</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="preview-btn primary">시작하기</button>
+      <button class="preview-btn outline">문서</button>
+    </div>
+    <div style="text-align: right;">
+      <span class="preview-badge">● Live</span>
+    </div>
+  </div>
+</div>
+
+<!-- DARK theme block -->
+<div class="theme-block dark theme-dark">
+  <div class="theme-head">
+    <h2>🌙 &nbsp;Dark theme</h2>
+    <p class="meta">콘솔, 모니터링, 영상 워크스테이션에서 사용. 라임 액센트는 한 단계(400) 밝게 올려 어두운 표면 위 대비를 유지한다.</p>
+  </div>
+
+  <div class="semantic-grid">
+    <div class="token-card"><div class="chip" style="background:#0B1117"></div><div class="meta-text"><span class="name">--bg-canvas</span><span class="desc">#0B1117</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#0F172A"></div><div class="meta-text"><span class="name">--bg-subtle</span><span class="desc">slate-900</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#1E293B"></div><div class="meta-text"><span class="name">--bg-muted</span><span class="desc">slate-800</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#FFFFFF"></div><div class="meta-text"><span class="name">--bg-inverse</span><span class="desc">white</span></div></div>
+
+    <div class="token-card"><div class="chip" style="background:#F1F5F9"></div><div class="meta-text"><span class="name">--fg-default</span><span class="desc">slate-100</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#94A3B8"></div><div class="meta-text"><span class="name">--fg-muted</span><span class="desc">slate-400</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#64748B"></div><div class="meta-text"><span class="name">--fg-subtle</span><span class="desc">slate-500</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#475569"></div><div class="meta-text"><span class="name">--fg-disabled</span><span class="desc">slate-600</span></div></div>
+
+    <div class="token-card"><div class="chip" style="background:#1E293B"></div><div class="meta-text"><span class="name">--border-default</span><span class="desc">slate-800</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#334155"></div><div class="meta-text"><span class="name">--border-strong</span><span class="desc">slate-700</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#9ED14E"></div><div class="meta-text"><span class="name">--primary</span><span class="desc">primary-400</span></div></div>
+    <div class="token-card"><div class="chip" style="background:#6B95A9"></div><div class="meta-text"><span class="name">--secondary</span><span class="desc">secondary-400</span></div></div>
+  </div>
+
+  <div class="surface-preview">
+    <div>
+      <p class="preview-title">활성 모델</p>
+      <p class="preview-meta">SELVAS TTS v3.2 · 한국어 자연 발화 엔진</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="preview-btn primary">시작하기</button>
+      <button class="preview-btn outline">문서</button>
+    </div>
+    <div style="text-align: right;">
+      <span class="preview-badge">● Live</span>
+    </div>
+  </div>
+</div>
+
+<p class="group-label">How to opt in</p>
+<pre style="background: var(--bg-muted); padding: 16px 20px; border-radius: var(--radius-md);
+            font: 500 13px/1.6 var(--font-mono); margin: 0;
+            color: var(--fg-default); white-space: pre-wrap;">&lt;link rel="stylesheet" href="colors_and_type.css"&gt;
+&lt;html class="theme-dark"&gt;     &lt;!-- whole document --&gt;
+&lt;section class="theme-dark"&gt;  &lt;!-- or scope to one region --&gt;</pre>
+
+<script>
+const ramps = {
+  primary:   { base: 500, text: 600 },
+  secondary: { base: 700, text: 800 },
+  slate:     {},
+  coolgray:  {},
+  gray:      {},
+  red:       { base: 600 },
+  yellow:    { base: 300 },
+  green:     { base: 500 },
+  blue:      { base: 600 },
+};
+const steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+const cs = getComputedStyle(document.documentElement);
+function isDark(hex) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0,2), 16);
+  const g = parseInt(h.slice(2,4), 16);
+  const b = parseInt(h.slice(4,6), 16);
+  return (r*299 + g*587 + b*114) / 1000 < 140;
+}
+for (const [name, meta] of Object.entries(ramps)) {
+  const host = document.getElementById(name);
+  for (const step of steps) {
+    const hex = cs.getPropertyValue(`--color-${name}-${step}`).trim();
+    if (!hex) continue;
+    const dark = isDark(hex);
+    const tag = step === meta.base ? "B" : step === meta.text ? "T" : null;
+    const div = document.createElement("div");
+    div.className = "swatch" + (dark ? " dark" : "") + (tag ? " tagged" : "");
+    if (tag) div.dataset.tag = tag;
+    div.style.background = hex;
+    div.innerHTML = `<span class="step">${step}</span><span class="hex">${hex.toUpperCase()}</span>`;
+    host.appendChild(div);
+  }
+}
+</script>
+</body>
+</html>

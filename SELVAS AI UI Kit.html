@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>SELVAS AI — UI Kit</title>
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  :root { --sidebar-w: 240px; --topbar-h: 60px; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg-subtle); display: grid;
+         grid-template-columns: var(--sidebar-w) 1fr;
+         grid-template-rows: var(--topbar-h) 1fr;
+         grid-template-areas: "side top" "side main"; min-height: 100vh; }
+
+  /* ---------- Sidebar ---------- */
+  aside.side {
+    grid-area: side;
+    background: white;
+    border-right: 1px solid var(--border-default);
+    padding: 20px 14px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .brand { display: flex; align-items: center; padding: 4px 8px; }
+  .brand img { height: 22px; width: auto; display: block; }
+
+  .nav-group { display: flex; flex-direction: column; gap: 2px; }
+  .nav-group .label { font: 500 11px/1 var(--font-ui); color: var(--fg-subtle);
+                      letter-spacing: 0.1em; text-transform: uppercase;
+                      padding: 6px 12px; }
+  .nav-item { display: flex; align-items: center; gap: 10px;
+              padding: 8px 12px; border-radius: var(--radius-md);
+              color: var(--fg-default); font: 500 14px/1 var(--font-ui);
+              cursor: pointer; }
+  .nav-item:hover { background: var(--bg-muted); }
+  .nav-item.active { background: var(--color-primary-50);
+                     color: var(--primary-text); font-weight: 600; }
+  .nav-item.active .ic { color: var(--primary-text); }
+  .nav-item .ic { width: 18px; height: 18px; flex: none; color: var(--fg-muted); }
+  .nav-item .badge { margin-left: auto; font: 500 11px/1 var(--font-ui);
+                     padding: 2px 6px; border-radius: 999px;
+                     background: var(--bg-muted); color: var(--fg-muted); }
+
+  /* ---------- Top bar ---------- */
+  header.top {
+    grid-area: top;
+    background: white;
+    border-bottom: 1px solid var(--border-default);
+    display: flex; align-items: center; padding: 0 28px; gap: 16px;
+  }
+  .crumb { font: 500 13px/1 var(--font-ui); color: var(--fg-subtle); }
+  .crumb b { color: var(--fg-default); font-weight: 600; }
+  .top .spacer { flex: 1; }
+  .search {
+    width: 320px; height: 36px; padding: 0 12px 0 36px;
+    border: 1px solid var(--border-default); border-radius: var(--radius-md);
+    background: var(--bg-subtle) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") 12px center/14px no-repeat;
+    font: 400 14px/1 var(--font-ui);
+  }
+  .search:focus { outline: none; border-color: var(--primary);
+                  box-shadow: var(--ring-default); background-color: white; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%;
+            background: var(--secondary); color: white;
+            display: inline-flex; align-items: center; justify-content: center;
+            font: 600 13px/1 var(--font-ui); }
+
+  /* ---------- Main ---------- */
+  main.main { grid-area: main; padding: 28px; overflow: auto; }
+  .page-head { display: flex; align-items: end; justify-content: space-between;
+               margin-bottom: 24px; }
+  .page-head h1 { margin: 0; }
+  .page-head .sub { color: var(--fg-muted); font-size: 14px; margin-top: 4px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr);
+               gap: 10px; margin-bottom: 16px; }
+  .stat {
+    background: white; border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg); padding: 20px;
+  }
+  .stat .lbl { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+               letter-spacing: 0.04em; text-transform: uppercase; }
+  .stat .val { font: 700 32px/1 var(--font-display); margin: 12px 0 8px;
+               letter-spacing: -0.02em; }
+  .stat .delta { font: 500 12px/1 var(--font-mono); color: var(--success); }
+  .stat .delta.down { color: var(--destructive); }
+  .stat.feature { background: var(--color-slate-950); color: white;
+                  border-color: transparent; }
+  .stat.feature .lbl { color: var(--color-slate-400); }
+  .stat.feature .val { color: var(--primary); }
+  .stat.feature .delta { color: var(--color-slate-400); }
+
+  /* layout grid */
+  .grid-2c { display: grid; grid-template-columns: 1fr 360px; gap: 10px; }
+
+  /* table card */
+  .panel-card { background: white; border: 1px solid var(--border-default);
+                border-radius: var(--radius-lg); overflow: hidden; }
+  .panel-card header { display: flex; align-items: center; justify-content: space-between;
+                       padding: 18px 20px; border-bottom: 1px solid var(--border-default); }
+  .panel-card header h2 { margin: 0; font: 700 16px/1 var(--font-display); }
+  .panel-card header .actions { display: flex; gap: 8px; }
+  .panel-card .body { padding: 4px 0 8px; }
+
+  .row-item { display: grid; grid-template-columns: 36px 1fr auto auto auto;
+              align-items: center; gap: 12px;
+              padding: 14px 20px; border-bottom: 1px solid var(--border-subtle); }
+  .row-item:last-child { border-bottom: 0; }
+  .row-item .ico { width: 36px; height: 36px; border-radius: 8px;
+                   background: var(--color-primary-50);
+                   color: var(--primary-text);
+                   display: flex; align-items: center; justify-content: center;
+                   font: 700 14px/1 var(--font-display); }
+  .row-item .ico.b { background: var(--color-secondary-100); color: var(--secondary); }
+  .row-item .ico.c { background: var(--color-blue-100); color: var(--info); }
+  .row-item .name { font: 600 14px/1.3 var(--font-ui); }
+  .row-item .sub { font: 400 12px/1.3 var(--font-ui); color: var(--fg-muted);
+                   margin-top: 4px; }
+  .row-item .meter { width: 140px; height: 6px; background: var(--bg-muted);
+                     border-radius: 999px; overflow: hidden; }
+  .row-item .meter span { display: block; height: 100%; background: var(--primary); }
+  .row-item .pct { font: 600 13px/1 var(--font-mono); color: var(--fg-default);
+                   width: 48px; text-align: right; }
+
+  /* badges (component reuse) */
+  .badge { display: inline-flex; align-items: center; gap: 4px;
+           font: 500 12px/1 var(--font-ui); padding: 4px 8px;
+           border-radius: var(--radius-full); }
+  .badge--primary  { background: var(--color-primary-100); color: var(--color-primary-800); }
+  .badge--success  { background: var(--color-green-100); color: var(--color-green-800); }
+  .badge--warning  { background: var(--color-yellow-100); color: var(--color-yellow-800); }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%;
+                background: currentColor; opacity: 0.8; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px; font-family: var(--font-ui); font-weight: 500;
+    border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; line-height: 1; user-select: none;
+    height: 32px; padding: 0 14px; font-size: 13px;
+  }
+  .btn--primary { background: var(--primary); color: var(--fg-on-primary); }
+  .btn--outline { background: transparent; border-color: var(--border-strong); color: var(--fg-default); }
+  .btn--ghost   { background: transparent; color: var(--fg-default); }
+  .btn--ghost:hover { background: var(--bg-muted); }
+
+  /* chart card */
+  .chart-card { background: white; border: 1px solid var(--border-default);
+                border-radius: var(--radius-lg); padding: 20px; }
+  .chart-card h2 { margin: 0 0 4px; font: 700 16px/1 var(--font-display); }
+  .chart-card .sub { color: var(--fg-muted); font-size: 13px; }
+
+  /* simple bar chart */
+  .bars { margin-top: 20px; display: grid;
+          grid-template-columns: repeat(7, 1fr); gap: 14px;
+          align-items: end; height: 160px; }
+  .bars .bar {
+    background: var(--color-primary-200);
+    border-radius: 4px 4px 0 0; position: relative;
+  }
+  .bars .bar.active { background: var(--primary); }
+  .bars .day { position: absolute; bottom: -22px; left: 0; right: 0;
+               text-align: center; font: 500 11px/1 var(--font-mono);
+               color: var(--fg-muted); }
+  .bars .val { position: absolute; top: -22px; left: 0; right: 0;
+               text-align: center; font: 600 12px/1 var(--font-mono);
+               color: var(--fg-default); }
+
+  /* status panel (right column) */
+  .status-card { background: white; border: 1px solid var(--border-default);
+                 border-radius: var(--radius-lg); padding: 20px;
+                 margin-bottom: 16px; }
+  .status-card h2 { margin: 0 0 12px; font: 700 14px/1 var(--font-display); }
+  .status-line { display: grid; grid-template-columns: 1fr auto;
+                 padding: 10px 0; border-bottom: 1px solid var(--border-subtle);
+                 align-items: center; }
+  .status-line:last-child { border-bottom: 0; }
+  .status-line .name { font: 500 13px/1 var(--font-ui); }
+  .status-line .desc { font: 400 12px/1.4 var(--font-ui); color: var(--fg-muted);
+                       margin-top: 4px; }
+
+  .alert { background: var(--primary); color: var(--fg-on-primary);
+           padding: 18px 20px; border-radius: var(--radius-lg);
+           margin-bottom: 10px; }
+  .alert .label { font: 600 11px/1 var(--font-ui); letter-spacing: 0.12em;
+                  text-transform: uppercase; opacity: 0.6; }
+  .alert h3 { margin: 8px 0 4px; font: 700 16px/1.2 var(--font-display); }
+  .alert p  { margin: 0 0 12px; font-size: 13px; opacity: 0.85; }
+
+  /* icon helpers (lucide-style inline) */
+  .ic { stroke: currentColor; stroke-width: 1.6; fill: none;
+        stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <div class="brand">
+    <img src="assets/selvas-logo.svg" alt="SELVAS AI" />
+  </div>
+  </div>
+
+  <div class="nav-group">
+    <span class="label">Workspace</span>
+    <div class="nav-item active">
+      <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      대시보드
+    </div>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M12 7v5l3 3"/></svg>
+      활동
+      <span class="badge">12</span>
+    </div>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Conversations
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <span class="label">Intelligence</span>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg>
+      음성지능
+    </div>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M12 19l9-7-9-7-9 7 9 7z"/><path d="M3 12l9 7 9-7"/></svg>
+      필기지능
+    </div>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 15l-5-5-7 7"/></svg>
+      영상지능
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <span class="label">Settings</span>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      환경설정
+    </div>
+    <div class="nav-item">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      API 키
+    </div>
+  </div>
+</aside>
+
+<header class="top">
+  <span class="crumb">Workspace · <b>대시보드</b></span>
+  <span class="spacer"></span>
+  <input class="search" placeholder="검색 — 모델, 프로젝트, 사용자..." />
+  <button class="btn btn--ghost">
+    <svg class="ic" width="16" height="16" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+  </button>
+  <button class="btn btn--primary">
+    <svg class="ic" width="14" height="14" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+    새 프로젝트
+  </button>
+  <span class="avatar">JK</span>
+</header>
+
+<main class="main">
+  <div class="page-head">
+    <div>
+      <h1 class="t-heading-lg" style="margin: 0;">안녕하세요, 진경님</h1>
+      <div class="sub">오늘 셀바스 AI 콘솔에는 새로운 활동 4건이 있습니다.</div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn--outline">내보내기</button>
+      <button class="btn btn--primary">데모 시작</button>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat feature">
+      <div class="lbl">Voice Synthesis</div>
+      <div class="val">128.4M</div>
+      <div class="delta">▲ 12.4% vs 지난주</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Handwriting OCR</div>
+      <div class="val">96.2<span style="font: 500 16px/1 var(--font-mono); color: var(--fg-muted);">%</span></div>
+      <div class="delta">▲ 0.6 pp</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Image inference</div>
+      <div class="val">42ms</div>
+      <div class="delta down">▼ 8ms slower</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Active accounts</div>
+      <div class="val">1,284</div>
+      <div class="delta">▲ 24 신규</div>
+    </div>
+  </div>
+
+  <div class="grid-2c">
+    <div>
+      <div class="chart-card" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <h2>주간 인퍼런스 처리량</h2>
+            <div class="sub">Voice + Handwriting + Image · last 7 days</div>
+          </div>
+          <div class="tabs" style="display: inline-flex; padding: 4px;
+                                   background: var(--bg-muted);
+                                   border-radius: var(--radius-md);">
+            <button class="btn btn--ghost" style="height: 26px; padding: 0 12px;
+                                                   background: white;
+                                                   box-shadow: var(--shadow-xs);">7D</button>
+            <button class="btn btn--ghost" style="height: 26px; padding: 0 12px;">30D</button>
+            <button class="btn btn--ghost" style="height: 26px; padding: 0 12px;">90D</button>
+          </div>
+        </div>
+        <div class="bars">
+          <div class="bar"      style="height: 38%"><span class="val">14M</span><span class="day">월</span></div>
+          <div class="bar"      style="height: 52%"><span class="val">19M</span><span class="day">화</span></div>
+          <div class="bar"      style="height: 44%"><span class="val">16M</span><span class="day">수</span></div>
+          <div class="bar"      style="height: 70%"><span class="val">26M</span><span class="day">목</span></div>
+          <div class="bar"      style="height: 64%"><span class="val">23M</span><span class="day">금</span></div>
+          <div class="bar active" style="height: 88%"><span class="val">32M</span><span class="day">토</span></div>
+          <div class="bar"      style="height: 50%"><span class="val">18M</span><span class="day">일</span></div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <header>
+          <h2>활성 모델</h2>
+          <div class="actions">
+            <button class="btn btn--ghost">필터</button>
+            <button class="btn btn--outline">+ 모델 추가</button>
+          </div>
+        </header>
+        <div class="body">
+          <div class="row-item">
+            <div class="ico">音</div>
+            <div>
+              <div class="name">SELVAS TTS v3.2 <span class="badge badge--success" style="margin-left: 8px;"><span class="dot"></span>Live</span></div>
+              <div class="sub">한국어 자연 발화 · 24kHz · 12개 화자</div>
+            </div>
+            <div class="meter"><span style="width: 92%"></span></div>
+            <div class="pct">92%</div>
+            <button class="btn btn--ghost">⋯</button>
+          </div>
+          <div class="row-item">
+            <div class="ico b">筆</div>
+            <div>
+              <div class="name">Handwriting OCR · Medical <span class="badge badge--primary" style="margin-left: 8px;"><span class="dot"></span>Beta</span></div>
+              <div class="sub">의료 차트 손글씨 → 정형 데이터</div>
+            </div>
+            <div class="meter"><span style="width: 78%; background: var(--secondary);"></span></div>
+            <div class="pct">78%</div>
+            <button class="btn btn--ghost">⋯</button>
+          </div>
+          <div class="row-item">
+            <div class="ico c">影</div>
+            <div>
+              <div class="name">Industrial Vision Lite <span class="badge badge--warning" style="margin-left: 8px;"><span class="dot"></span>Tuning</span></div>
+              <div class="sub">제조 라인 결함 감지</div>
+            </div>
+            <div class="meter"><span style="width: 64%; background: var(--info);"></span></div>
+            <div class="pct">64%</div>
+            <button class="btn btn--ghost">⋯</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="alert">
+        <div class="label">새로운 기능</div>
+        <h3>Voice Cloning v3 출시</h3>
+        <p>30초 샘플로 자연스러운 한국어 음성을 복제합니다. 기존 프로젝트에 추가해 보세요.</p>
+        <button class="btn" style="background: transparent; color: white; border: 0; padding: 0; height: auto; font-weight: 600;">자세히 보기 →</button>
+      </div>
+
+      <div class="status-card">
+        <h2>시스템 상태</h2>
+        <div class="status-line">
+          <div>
+            <div class="name">Inference API</div>
+            <div class="desc">평균 응답 84ms · 가용성 99.99%</div>
+          </div>
+          <span class="badge badge--success"><span class="dot"></span>정상</span>
+        </div>
+        <div class="status-line">
+          <div>
+            <div class="name">Speech Cluster (Seoul)</div>
+            <div class="desc">12 / 12 노드 활성</div>
+          </div>
+          <span class="badge badge--success"><span class="dot"></span>정상</span>
+        </div>
+        <div class="status-line">
+          <div>
+            <div class="name">Vision Cluster (Daejeon)</div>
+            <div class="desc">예약 정비 — 11/15 02:00 KST</div>
+          </div>
+          <span class="badge badge--warning"><span class="dot"></span>예정</span>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <h2>이번 달 사용량</h2>
+        <div style="display: flex; align-items: end; gap: 12px; margin-bottom: 8px;">
+          <div style="font: 700 28px/1 var(--font-display);">7,820,400</div>
+          <div style="font: 500 12px/1 var(--font-mono); color: var(--fg-muted); padding-bottom: 4px;">/ 12,000,000 calls</div>
+        </div>
+        <div style="height: 8px; background: var(--bg-muted); border-radius: 999px; overflow: hidden;">
+          <div style="height: 100%; width: 65%;
+                      background: linear-gradient(90deg, var(--primary), var(--color-primary-600));"></div>
+        </div>
+        <div style="margin-top: 8px; font: 400 12px/1 var(--font-ui); color: var(--fg-muted);">
+          Quota 65% 사용 · 다음 갱신 11월 30일
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+</body>
+</html>

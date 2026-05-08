@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Brand — SELVAS AI</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { background: var(--bg-canvas); padding: 56px 64px; margin: 0;
+         max-width: 1200px; }
+  .card-header { padding-bottom: 32px; border-bottom: 1px solid var(--border-default);
+                 margin-bottom: 40px; }
+  .eyebrow { font: 500 12px/1 var(--font-ui); letter-spacing: 0.12em;
+             text-transform: uppercase; color: var(--primary-text); margin: 0 0 12px; }
+  .group-label { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+                 letter-spacing: 0.08em; text-transform: uppercase; margin: 40px 0 16px; }
+  .panel { background: var(--bg-subtle); border: 1px solid var(--border-default);
+           border-radius: var(--radius-lg); padding: 28px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  .logo-card { display: flex; align-items: center; justify-content: center;
+               border-radius: var(--radius-lg); padding: 56px 24px;
+               border: 1px solid var(--border-default);
+               min-height: 200px; position: relative; }
+  .logo-card.dark  { background: var(--color-slate-950); border-color: var(--color-slate-900); }
+  .logo-card.brand { background: var(--primary); border-color: var(--color-primary-600); }
+  .logo-card.light { background: white; }
+  .logo-card .tag { position: absolute; bottom: 12px; left: 16px;
+                    font: 500 11px/1 var(--font-ui); letter-spacing: 0.06em;
+                    text-transform: uppercase; color: var(--fg-subtle); }
+  .logo-card.dark .tag  { color: var(--color-slate-500); }
+  .logo-card.brand .tag { color: rgba(0,0,0,0.55); }
+
+  .logo-card img { height: 56px; width: auto; display: block; }
+
+  /* Lockup spec */
+  .spec { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: stretch; }
+  .spec .frame { background: white; border: 1px solid var(--border-default);
+                 border-radius: var(--radius-lg); padding: 32px;
+                 display: flex; align-items: center; justify-content: center;
+                 position: relative; min-height: 220px; }
+  .spec .frame img { height: 60px; }
+  .spec .frame .x { position: absolute; font: 500 11px/1 var(--font-mono);
+                    color: var(--color-primary-600); }
+  .spec .frame .x.t { top: 14px; left: 50%; transform: translateX(-50%); }
+  .spec .frame .x.b { bottom: 14px; left: 50%; transform: translateX(-50%); }
+  .spec .frame .x.l { left: 14px; top: 50%; transform: translateY(-50%); }
+  .spec .frame .x.r { right: 14px; top: 50%; transform: translateY(-50%); }
+  .spec .notes { background: white; border: 1px solid var(--border-default);
+                 border-radius: var(--radius-lg); padding: 24px;
+                 font-size: 14px; line-height: 1.6; color: var(--fg-muted); }
+  .spec .notes h4 { margin: 0 0 8px; color: var(--fg-default); font: 600 14px/1 var(--font-ui); }
+  .spec .notes ul { margin: 0 0 16px; padding-left: 18px; }
+  .spec .notes li { margin-bottom: 4px; }
+
+  /* Three intelligences */
+  .pillar { background: white; border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg); padding: 24px; }
+  .pillar h3 { margin: 0 0 8px; }
+  .pillar p { margin: 0; font-size: 14px; color: var(--fg-muted); line-height: 1.6; }
+  .pillar .ko { font: 700 18px/1.3 var(--font-display); color: var(--fg-default);
+                margin-bottom: 4px; letter-spacing: -0.01em; }
+
+  /* Voice/Don't */
+  .vt { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .vt > div { background: white; border: 1px solid var(--border-default);
+              border-radius: var(--radius-lg); padding: 20px 24px; }
+  .vt .label { font: 600 12px/1 var(--font-ui); letter-spacing: 0.08em;
+               text-transform: uppercase; margin-bottom: 12px; }
+  .vt .yes .label { color: var(--success); }
+  .vt .no  .label { color: var(--destructive); }
+  .vt p { margin: 0 0 8px; font-size: 15px; line-height: 1.5; }
+  .vt p:last-child { margin-bottom: 0; }
+
+  /* Misuse */
+  .misuse { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .misuse .m { background: white; border: 1px solid var(--border-default);
+               border-radius: var(--radius-lg); padding: 24px;
+               display: flex; flex-direction: column; align-items: center;
+               gap: 12px; min-height: 160px; justify-content: center;
+               position: relative; overflow: hidden; }
+  .misuse .m img { height: 36px; }
+  .misuse .m .label { font: 500 12px/1.3 var(--font-ui); color: var(--fg-muted);
+                      text-align: center; }
+  .misuse .m .x {
+    position: absolute; top: 8px; right: 8px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--color-red-100); color: var(--color-red-700);
+    display: inline-flex; align-items: center; justify-content: center;
+    font: 700 14px/1 var(--font-ui);
+  }
+</style>
+</head>
+<body>
+
+<header class="card-header">
+  <p class="eyebrow">Design System · Brand</p>
+  <h1 class="t-display-sm">SELVAS AI &nbsp;<span style="color: var(--fg-muted);">셀바스 AI</span></h1>
+  <p class="t-body-lg" style="color: var(--fg-muted); margin: 12px 0 0; max-width: 720px;">
+    음성·필기·영상 — 세 가지 인텔리전스로 산업과 일상을 연결하는
+    엔터프라이즈 AI 회사. 공식 CI 로고를 표준 자산으로 사용합니다.
+  </p>
+</header>
+
+<p class="group-label">Logo lockup — official CI</p>
+<div class="grid-3">
+  <div class="logo-card light">
+    <img src="../assets/selvas-logo.svg" alt="SELVAS AI logo, light background" />
+    <span class="tag">Light · primary</span>
+  </div>
+  <div class="logo-card dark">
+    <img src="../assets/selvas-logo-dark.svg" alt="SELVAS AI logo, dark background" />
+    <span class="tag">Dark · inverse</span>
+  </div>
+  <div class="logo-card brand">
+    <img src="../assets/selvas-logo-white.svg" alt="SELVAS AI logo on brand color" />
+    <span class="tag">Brand · lime</span>
+  </div>
+</div>
+
+<p class="group-label">Symbol mark — standalone usage</p>
+<div class="grid-3">
+  <div class="logo-card light">
+    <img src="../assets/selvas-symbol.svg" alt="SELVAS symbol mark, light background" style="height: 80px;" />
+    <span class="tag">Light · primary</span>
+  </div>
+  <div class="logo-card dark">
+    <img src="../assets/selvas-symbol.svg" alt="SELVAS symbol mark, dark background" style="height: 80px;" />
+    <span class="tag">Dark · brand color stays lime</span>
+  </div>
+  <div class="logo-card brand">
+    <img src="../assets/selvas-symbol.svg" alt="SELVAS symbol mark on brand color" style="height: 80px; filter: brightness(0) invert(1);" />
+    <span class="tag">Brand · mono white</span>
+  </div>
+</div>
+<div class="panel" style="margin-top: 16px;">
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; align-items: center;">
+    <div style="display: flex; align-items: center; justify-content: center; padding: 24px;
+                background: white; border: 1px solid var(--border-default); border-radius: var(--radius-md);">
+      <img src="../assets/selvas-symbol.svg" style="height: 64px;" alt="symbol 64px" />
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 24px;
+                background: white; border: 1px solid var(--border-default); border-radius: var(--radius-md);">
+      <img src="../assets/selvas-symbol.svg" style="height: 40px;" alt="symbol 40px" />
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 24px;
+                background: white; border: 1px solid var(--border-default); border-radius: var(--radius-md);">
+      <img src="../assets/selvas-symbol.svg" style="height: 24px;" alt="symbol 24px" />
+    </div>
+    <div style="font-size: 14px; line-height: 1.6; color: var(--fg-muted);">
+      <strong style="color: var(--fg-default); font: 600 14px/1 var(--font-ui);">Symbol-only 사용 시점</strong><br/>
+      앱 아이콘, 파비콘, 워터마크, 소셜 아바타처럼 워드마크가 들어갈 공간이 없을 때만 단독 사용.<br/>
+      최소 사이즈는 화면 24×24px / 인쇄 8mm. 항상 정사각 캔버스 안에 충분한 여백을 두고 배치.
+    </div>
+  </div>
+</div>
+
+<p class="group-label">Construction &amp; clear-space</p>
+<div class="spec">
+  <div class="frame">
+    <span class="x t">x</span><span class="x b">x</span>
+    <span class="x l">x</span><span class="x r">x</span>
+    <img src="../assets/selvas-logo.svg" alt="SELVAS AI logo with clear-space markers" />
+  </div>
+  <div class="notes">
+    <h4>Clear-space</h4>
+    <ul>
+      <li>최소 여백은 워드마크 캡 높이 (= <code>x</code>) 이상.</li>
+      <li>네 변 모두 동일하게 적용.</li>
+    </ul>
+    <h4>Minimum size</h4>
+    <ul>
+      <li>스크린: 폭 96px 이상</li>
+      <li>인쇄: 폭 24mm 이상</li>
+    </ul>
+    <h4>Color usage</h4>
+    <ul>
+      <li>밝은 배경에는 <code>selvas-logo.svg</code> (slate <code>#384F5E</code> + lime).</li>
+      <li>어두운 배경에는 <code>selvas-logo-dark.svg</code> (white + lime).</li>
+      <li>라임 브랜드 배경에는 <code>selvas-logo-white.svg</code> (모노 화이트).</li>
+      <li>슬로건도 동일한 컬러를 따라간다.</li>
+    </ul>
+  </div>
+</div>
+
+<p class="group-label">Three intelligences</p>
+<div class="grid-3">
+  <div class="pillar">
+    <div class="ko">음성지능</div>
+    <h3 class="t-heading-xs">Voice intelligence</h3>
+    <p>자연스러운 한국어 음성 합성, 실시간 음성 인식, 화자 분리 — 모든 음성 워크플로의 토대.</p>
+  </div>
+  <div class="pillar">
+    <div class="ko">필기지능</div>
+    <h3 class="t-heading-xs">Handwriting intelligence</h3>
+    <p>의료, 교육, 행정 분야의 손글씨를 정형 데이터로 변환하는 OCR과 필기 학습 엔진.</p>
+  </div>
+  <div class="pillar">
+    <div class="ko">영상지능</div>
+    <h3 class="t-heading-xs">Image intelligence</h3>
+    <p>의료 영상과 산업 비전 데이터를 분석하는 비전 모델 — 진단과 검사를 가속한다.</p>
+  </div>
+</div>
+
+<p class="group-label">Voice &amp; tone</p>
+<div class="vt">
+  <div class="yes">
+    <div class="label">Do</div>
+    <p>· 정보를 그룹으로 묶고 위계로 보여준다.</p>
+    <p>· 짧고 분명한 한국어 — 명사형 종결도 환영.</p>
+    <p>· 숫자는 의미가 있을 때만, 단위와 함께.</p>
+    <p>· English UI uses sentence case; product names stay in their native script.</p>
+  </div>
+  <div class="no">
+    <div class="label">Don't</div>
+    <p>· 화려한 그라데이션이나 장식적인 그림자.</p>
+    <p>· 라임색·슬레이트 외 새로운 브랜드 컬러를 즉흥적으로 도입.</p>
+    <p>· 의미 없는 통계 ("99.9%") 나 빈 강조어로 슬라이드를 채우기.</p>
+    <p>· Mixing fonts mid-sentence — let Pretendard render both Hangul and Latin.</p>
+  </div>
+</div>
+
+<p class="group-label">Logo misuse</p>
+<div class="misuse">
+  <div class="m">
+    <span class="x">✕</span>
+    <img src="../assets/selvas-logo.svg" style="filter: hue-rotate(180deg) saturate(1.5);" alt="Recolored logo — incorrect" />
+    <span class="label">컬러 변경 금지</span>
+  </div>
+  <div class="m">
+    <span class="x">✕</span>
+    <img src="../assets/selvas-logo.svg" style="transform: skewX(-12deg);" alt="Distorted logo — incorrect" />
+    <span class="label">왜곡 금지</span>
+  </div>
+  <div class="m" style="background: repeating-linear-gradient(45deg, #f3f4f6, #f3f4f6 8px, #ffffff 8px, #ffffff 16px);">
+    <span class="x">✕</span>
+    <img src="../assets/selvas-logo.svg" alt="Logo on busy background — incorrect" />
+    <span class="label">복잡한 배경 금지</span>
+  </div>
+  <div class="m">
+    <span class="x">✕</span>
+    <img src="../assets/selvas-logo.svg" style="opacity: 0.35;" alt="Faded logo — incorrect" />
+    <span class="label">투명도 적용 금지</span>
+  </div>
+</div>
+
+<p class="group-label">Brand color recipe</p>
+<div class="panel" style="display: flex; gap: 24px; align-items: stretch;">
+  <div style="flex: 0 0 220px; background: var(--primary); border-radius: var(--radius-md); padding: 20px; color: var(--fg-on-primary);">
+    <div style="font: 700 18px/1 var(--font-display);">Primary 500</div>
+    <div style="font: 500 13px/1 var(--font-mono); margin-top: 8px;">#87C82F</div>
+    <div style="font-size: 12px; margin-top: 16px; opacity: 0.7;">CTA · 포커스 · 브랜드 액센트</div>
+  </div>
+  <div style="flex: 0 0 220px; background: var(--secondary); border-radius: var(--radius-md); padding: 20px; color: white;">
+    <div style="font: 700 18px/1 var(--font-display);">Secondary 700</div>
+    <div style="font: 500 13px/1 var(--font-mono); margin-top: 8px;">#384F5E</div>
+    <div style="font-size: 12px; margin-top: 16px; opacity: 0.85;">보조 액션 · 다크 크롬 · 워드마크</div>
+  </div>
+  <div style="flex: 1; padding: 20px; font-size: 14px; line-height: 1.6; color: var(--fg-muted);">
+    공식 CI는 슬레이트 워드마크 + 라임 심볼(화살표). 두 컬러가 브랜드의 모든 무게를 지탱한다.
+    슬레이트 램프는 크롬·디바이더·본문에, 중성 그레이는 비활성·스켈레톤 같은 유틸리티 상태에만 사용.
+    의미가 명확할 때만 시맨틱 컬러(red/yellow/green/blue)에 손을 댄다.
+  </div>
+</div>
+
+</body>
+</html>

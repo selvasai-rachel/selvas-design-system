@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Components — SELVAS AI</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { background: var(--bg-canvas); padding: 56px 64px; margin: 0;
+         max-width: 1280px; }
+  .card-header { padding-bottom: 32px; border-bottom: 1px solid var(--border-default);
+                 margin-bottom: 40px; }
+  .eyebrow { font: 500 12px/1 var(--font-ui); letter-spacing: 0.12em;
+             text-transform: uppercase; color: var(--primary-text); margin: 0 0 12px; }
+  .group-label { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+                 letter-spacing: 0.08em; text-transform: uppercase; margin: 48px 0 16px; }
+  .sub-label { font: 600 13px/1 var(--font-ui); color: var(--fg-default);
+               margin: 24px 0 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .panel { background: var(--bg-subtle); border: 1px solid var(--border-default);
+           border-radius: var(--radius-lg); padding: 24px; }
+  .matrix { display: grid; grid-template-columns: 100px repeat(6, 1fr);
+            gap: 12px; align-items: center; }
+  .matrix .head { font: 500 11px/1 var(--font-ui); color: var(--fg-subtle);
+                  letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 0; }
+  .matrix .rowlabel { font: 600 12px/1 var(--font-ui); color: var(--fg-muted); }
+  .matrix > .cell { display: flex; }
+
+  /* ---------- Icon ---------- */
+  .ic { width: 16px; height: 16px; flex: none;
+        stroke: currentColor; stroke-width: 2; fill: none;
+        stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Button ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px;
+    font-family: var(--font-ui); font-weight: 500;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-standard),
+                box-shadow var(--duration-fast) var(--ease-standard),
+                color var(--duration-fast) var(--ease-standard),
+                border-color var(--duration-fast) var(--ease-standard);
+    line-height: 1; user-select: none;
+  }
+  .btn:focus-visible { outline: none; }
+  .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+  .btn--default { height: 36px; padding: 0 16px; font-size: 14px; }
+  .btn--lg      { height: 44px; padding: 0 20px; font-size: 16px; }
+  .btn--sm      { height: 32px; padding: 0 12px; font-size: 13px; }
+  .btn--mini    { height: 24px; padding: 0 8px;  font-size: 12px;
+                  border-radius: var(--radius-sm); }
+  .btn--icon-only { padding: 0; width: 36px; }
+  .btn--icon-only.btn--lg { width: 44px; }
+  .btn--icon-only.btn--sm { width: 32px; }
+  .btn--icon-only.btn--round { border-radius: 9999px; }
+
+  /* Hover and Active share one state — same darker fill, no press shadow. */
+
+  /* Primary lime — text stays black across all states */
+  .btn--primary { background: var(--color-primary-500); color: #0A0A0A; }
+  .btn--primary.is-hover, .btn--primary:hover,
+  .btn--primary.is-active, .btn--primary:active { background: var(--color-primary-600); color: #0A0A0A; }
+  .btn--primary.is-focus, .btn--primary:focus-visible { background: var(--color-primary-500); color: #0A0A0A;
+    box-shadow: 0 0 0 3px rgb(135 200 47 / 0.45); }
+
+  .btn--secondary { background: var(--color-secondary-700); color: white; }
+  .btn--secondary.is-hover, .btn--secondary:hover,
+  .btn--secondary.is-active, .btn--secondary:active { background: var(--color-secondary-800); }
+  .btn--secondary.is-focus, .btn--secondary:focus-visible { box-shadow: 0 0 0 3px rgb(56 79 94 / 0.40); }
+
+  .btn--tertiary { background: var(--color-slate-100); color: var(--color-slate-950); }
+  .btn--tertiary.is-hover, .btn--tertiary:hover,
+  .btn--tertiary.is-active, .btn--tertiary:active { background: var(--color-slate-200); }
+  .btn--tertiary.is-focus, .btn--tertiary:focus-visible { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.45); }
+
+  .btn--outline { background: transparent;
+                  border-color: var(--color-slate-300); color: var(--color-slate-950); }
+  .btn--outline.is-hover, .btn--outline:hover,
+  .btn--outline.is-active, .btn--outline:active { background: var(--color-slate-100); }
+  .btn--outline.is-focus, .btn--outline:focus-visible { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.45); }
+
+  .btn--ghost { background: transparent; color: var(--color-slate-950); }
+  .btn--ghost.is-hover, .btn--ghost:hover,
+  .btn--ghost.is-active, .btn--ghost:active { background: var(--color-slate-100); }
+  .btn--ghost.is-focus, .btn--ghost:focus-visible { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.45); }
+
+  .btn--ghost-muted { background: transparent; color: var(--color-slate-600); }
+  .btn--ghost-muted.is-hover, .btn--ghost-muted:hover,
+  .btn--ghost-muted.is-active, .btn--ghost-muted:active { background: var(--color-slate-100); color: var(--color-slate-950); }
+  .btn--ghost-muted.is-focus, .btn--ghost-muted:focus-visible { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.45); }
+
+  .btn--destructive { background: var(--color-red-600); color: white; }
+  .btn--destructive.is-hover, .btn--destructive:hover,
+  .btn--destructive.is-active, .btn--destructive:active { background: var(--color-red-700); }
+  .btn--destructive.is-focus, .btn--destructive:focus-visible { box-shadow: 0 0 0 3px rgb(220 38 38 / 0.40); }
+
+  .btn--round { border-radius: 9999px; }
+
+  /* ---------- Input ---------- */
+  .input {
+    height: 36px; padding: 0 12px;
+    font: 400 14px/1 var(--font-ui);
+    background: white;
+    color: var(--fg-default);
+    border: 1px solid var(--color-slate-200);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-fast) var(--ease-standard),
+                box-shadow var(--duration-fast) var(--ease-standard);
+    width: 240px;
+    box-sizing: border-box;
+  }
+  .input::placeholder { color: var(--fg-subtle); }
+  .input:hover { border-color: var(--color-slate-300); }
+  .input:focus, .input.is-focus { outline: none; border-color: var(--color-primary-500);
+                                  box-shadow: 0 0 0 3px rgb(135 200 47 / 0.40); }
+  .input--lg { height: 44px; padding: 0 14px; font-size: 16px; }
+  .input--sm { height: 32px; padding: 0 10px; font-size: 13px; }
+  .input--round { border-radius: 9999px; padding-left: 16px; padding-right: 16px; }
+  .input--error { border-color: var(--color-red-600); }
+  .input--error:focus, .input--error.is-focus { box-shadow: 0 0 0 3px rgb(220 38 38 / 0.40); }
+  .input[disabled] { background: var(--color-slate-50);
+                     border-color: var(--color-slate-200);
+                     color: var(--fg-disabled);
+                     cursor: not-allowed; opacity: 0.6; }
+  .input[disabled]::placeholder { color: var(--fg-disabled); }
+  .input[disabled]:hover { border-color: var(--color-slate-200); }
+
+  .input-group { position: relative; display: inline-block; }
+  .input-group .ic { position: absolute; top: 50%; left: 12px; transform: translateY(-50%);
+                     color: var(--fg-subtle); pointer-events: none; }
+  .input-group .input { padding-left: 36px; }
+  .input-group.lg .ic { left: 14px; }
+  .input-group.lg .input { padding-left: 40px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font: 500 13px/1 var(--font-ui); color: var(--fg-default); }
+  .field .help { font: 400 12px/1.4 var(--font-ui); color: var(--fg-subtle); }
+  .field .help--error { color: var(--color-red-600); }
+
+  /* ---------- Switch ---------- */
+  .switch { position: relative; width: 36px; height: 20px;
+            background: var(--color-slate-200);
+            border-radius: 999px; cursor: pointer;
+            transition: background var(--duration-base) var(--ease-standard),
+                        box-shadow var(--duration-fast) var(--ease-standard); }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px;
+                   width: 16px; height: 16px; background: white;
+                   border-radius: 50%; box-shadow: var(--shadow-xs);
+                   transition: transform var(--duration-base) var(--ease-standard); }
+  .switch.on { background: var(--color-primary-500); }
+  .switch.on::after { transform: translateX(16px); }
+  .switch.is-focus { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.40); }
+
+  /* ---------- Checkbox / Radio ---------- */
+  .checkbox, .radio {
+    width: 18px; height: 18px; border: 1.5px solid var(--color-slate-300);
+    background: white; display: inline-flex; align-items: center;
+    justify-content: center; cursor: pointer;
+    transition: box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  .checkbox { border-radius: 4px; }
+  .radio    { border-radius: 50%; }
+  .checkbox.checked, .radio.checked {
+    background: var(--color-primary-500); border-color: var(--color-primary-500);
+  }
+  .checkbox.checked::after {
+    content: ""; width: 10px; height: 6px;
+    border-left: 2px solid #0A0A0A;
+    border-bottom: 2px solid #0A0A0A;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .radio.checked::after {
+    content: ""; width: 8px; height: 8px; border-radius: 50%; background: #0A0A0A;
+  }
+  .checkbox.is-focus, .radio.is-focus { box-shadow: 0 0 0 3px rgb(135 200 47 / 0.40); }
+
+  /* ---------- Tabs : Segmented ---------- */
+  .tabs-segmented { display: inline-flex; padding: 4px; background: var(--color-slate-100);
+                    border-radius: var(--radius-md); }
+  .tabs-segmented button { background: transparent; border: 0; cursor: pointer;
+                           font: 500 13px/1 var(--font-ui); color: var(--fg-muted);
+                           padding: 7px 14px; border-radius: var(--radius-sm);
+                           display: inline-flex; align-items: center; gap: 6px; }
+  .tabs-segmented button.active { background: white; color: var(--fg-default);
+                                  box-shadow: var(--shadow-xs); }
+  .tabs-segmented button:hover:not(.active) { color: var(--fg-default); }
+
+  /* ---------- Tabs : Underline ---------- */
+  .tabs-underline { display: inline-flex; gap: 4px;
+                    border-bottom: 1px solid var(--color-slate-200);
+                    padding-right: 12px; }
+  .tabs-underline button { background: transparent; border: 0; cursor: pointer;
+                           font: 500 14px/1 var(--font-ui); color: var(--fg-muted);
+                           padding: 12px 16px; position: relative;
+                           display: inline-flex; align-items: center; gap: 6px; }
+  .tabs-underline button::after {
+    content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px;
+    height: 2px; background: transparent; border-radius: 2px 2px 0 0;
+    transition: background var(--duration-fast) var(--ease-standard);
+  }
+  .tabs-underline button.active { color: var(--fg-default); font-weight: 600; }
+  .tabs-underline button.active::after { background: var(--fg-default); }
+  .tabs-underline button:hover:not(.active) { color: var(--fg-default); }
+  .tabs-underline .count { font: 500 11px/1 var(--font-ui);
+                           background: var(--color-slate-100); color: var(--fg-muted);
+                           padding: 2px 6px; border-radius: 999px; }
+  .tabs-underline .active .count { background: var(--color-slate-900); color: white; }
+
+  /* ---------- Badge ---------- */
+  .badge { display: inline-flex; align-items: center; gap: 4px;
+           font: 500 12px/1 var(--font-ui); padding: 4px 8px;
+           border-radius: var(--radius-full); }
+  .badge--neutral  { background: var(--color-slate-100); color: var(--fg-default); }
+  .badge--primary  { background: var(--color-primary-100); color: var(--color-primary-800); }
+  .badge--success  { background: var(--color-green-100); color: var(--color-green-800); }
+  .badge--warning  { background: var(--color-yellow-100); color: var(--color-yellow-800); }
+  .badge--error    { background: var(--color-red-100); color: var(--color-red-800); }
+  .badge--info     { background: var(--color-blue-100); color: var(--color-blue-800); }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%;
+                background: currentColor; opacity: 0.8; }
+
+  /* ---------- Card ---------- */
+  .card { background: white; border: 1px solid var(--color-slate-200);
+          border-radius: var(--radius-lg); padding: 24px;
+          box-shadow: var(--shadow-sm); width: 320px; }
+  .card h3 { margin: 0 0 4px; }
+  .card p  { margin: 0; color: var(--fg-muted); font-size: 14px; }
+  .card .meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+                font: 500 12px/1 var(--font-ui); color: var(--fg-subtle); }
+</style>
+</head>
+<body>
+
+<header class="card-header">
+  <p class="eyebrow">Design System · Components</p>
+  <h1 class="t-display-sm">Core components</h1>
+  <p class="t-body-lg" style="color: var(--fg-muted); margin: 12px 0 0; max-width: 640px;">
+    The shadcn/ui-derived primitives, tuned to SELVAS lime + slate.
+    Every state — default, hover/active, focus, disabled — is shown
+    explicitly. Hover and active share one fill. Lime button text stays black across all states.
+  </p>
+</header>
+
+<!-- =============================================================== BUTTON -->
+<p class="group-label">Button — variants × states</p>
+<div class="panel">
+  <div class="matrix">
+    <div></div>
+    <div class="head">Default</div>
+    <div class="head">Hover / Active</div>
+    <div class="head">Focus</div>
+    <div class="head">Disabled</div>
+    <div class="head">Loading</div>
+    <div class="head">+ Icon</div>
+
+    <div class="rowlabel">Primary</div>
+    <div class="cell"><button class="btn btn--default btn--primary">Primary</button></div>
+    <div class="cell"><button class="btn btn--default btn--primary is-hover">Primary</button></div>
+    <div class="cell"><button class="btn btn--default btn--primary is-focus">Primary</button></div>
+    <div class="cell"><button class="btn btn--default btn--primary" disabled>Primary</button></div>
+    <div class="cell"><button class="btn btn--default btn--primary"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--primary"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div>
+
+    <div class="rowlabel">Secondary</div>
+    <div class="cell"><button class="btn btn--default btn--secondary">Secondary</button></div>
+    <div class="cell"><button class="btn btn--default btn--secondary is-hover">Secondary</button></div>
+    <div class="cell"><button class="btn btn--default btn--secondary is-focus">Secondary</button></div>
+    <div class="cell"><button class="btn btn--default btn--secondary" disabled>Secondary</button></div>
+    <div class="cell"><button class="btn btn--default btn--secondary"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--secondary"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>Continue</button></div>
+
+    <div class="rowlabel">Tertiary</div>
+    <div class="cell"><button class="btn btn--default btn--tertiary">Tertiary</button></div>
+    <div class="cell"><button class="btn btn--default btn--tertiary is-hover">Tertiary</button></div>
+    <div class="cell"><button class="btn btn--default btn--tertiary is-focus">Tertiary</button></div>
+    <div class="cell"><button class="btn btn--default btn--tertiary" disabled>Tertiary</button></div>
+    <div class="cell"><button class="btn btn--default btn--tertiary"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--tertiary"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download</button></div>
+
+    <div class="rowlabel">Outline</div>
+    <div class="cell"><button class="btn btn--default btn--outline">Outline</button></div>
+    <div class="cell"><button class="btn btn--default btn--outline is-hover">Outline</button></div>
+    <div class="cell"><button class="btn btn--default btn--outline is-focus">Outline</button></div>
+    <div class="cell"><button class="btn btn--default btn--outline" disabled>Outline</button></div>
+    <div class="cell"><button class="btn btn--default btn--outline"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--outline"><svg class="ic" viewBox="0 0 24 24"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>Filter</button></div>
+
+    <div class="rowlabel">Ghost</div>
+    <div class="cell"><button class="btn btn--default btn--ghost">Ghost</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost is-hover">Ghost</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost is-focus">Ghost</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost" disabled>Ghost</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</button></div>
+
+    <div class="rowlabel">Ghost muted</div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted">Cancel</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted is-hover">Cancel</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted is-focus">Cancel</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted" disabled>Cancel</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--ghost-muted"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>Close</button></div>
+
+    <div class="rowlabel">Destructive</div>
+    <div class="cell"><button class="btn btn--default btn--destructive">Destructive</button></div>
+    <div class="cell"><button class="btn btn--default btn--destructive is-hover">Destructive</button></div>
+    <div class="cell"><button class="btn btn--default btn--destructive is-focus">Destructive</button></div>
+    <div class="cell"><button class="btn btn--default btn--destructive" disabled>Destructive</button></div>
+    <div class="cell"><button class="btn btn--default btn--destructive"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/></svg>Loading</button></div>
+    <div class="cell"><button class="btn btn--default btn--destructive"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete</button></div>
+  </div>
+</div>
+
+<p class="sub-label">Sizes &amp; shape</p>
+<div class="panel">
+  <div class="row">
+    <button class="btn btn--lg btn--primary">Large · 44</button>
+    <button class="btn btn--default btn--primary">Default · 36</button>
+    <button class="btn btn--sm btn--primary">Small · 32</button>
+    <button class="btn btn--mini btn--primary">Mini · 24</button>
+    <span style="width: 16px;"></span>
+    <button class="btn btn--default btn--primary btn--round">Round</button>
+    <button class="btn btn--default btn--secondary btn--round">Round</button>
+    <button class="btn btn--default btn--outline btn--round">Round</button>
+  </div>
+</div>
+
+<p class="sub-label">Icon-only — square (radius 6)</p>
+<div class="panel">
+  <div class="row">
+    <button class="btn btn--lg btn--primary  btn--icon-only" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn btn--default btn--primary btn--icon-only" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn btn--sm btn--primary btn--icon-only" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <span style="width: 12px;"></span>
+    <button class="btn btn--default btn--secondary btn--icon-only" aria-label="settings"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <button class="btn btn--default btn--outline btn--icon-only" aria-label="search"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="btn btn--default btn--ghost btn--icon-only" aria-label="more"><svg class="ic" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
+    <button class="btn btn--default btn--destructive btn--icon-only" aria-label="delete"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+  </div>
+</div>
+
+<p class="sub-label">Icon-only — round (FAB / circular action)</p>
+<div class="panel">
+  <div class="row">
+    <button class="btn btn--lg btn--primary btn--icon-only btn--round" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn btn--default btn--primary btn--icon-only btn--round" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn btn--sm btn--primary btn--icon-only btn--round" aria-label="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <span style="width: 12px;"></span>
+    <button class="btn btn--default btn--secondary btn--icon-only btn--round" aria-label="settings"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <button class="btn btn--default btn--outline btn--icon-only btn--round" aria-label="search"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="btn btn--default btn--ghost btn--icon-only btn--round" aria-label="more"><svg class="ic" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
+    <button class="btn btn--default btn--destructive btn--icon-only btn--round" aria-label="delete"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+  </div>
+</div>
+
+<!-- =============================================================== INPUT -->
+<p class="group-label">Input — sizes, shapes, states</p>
+
+<p class="sub-label">Sizes</p>
+<div class="panel" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+  <input class="input input--lg" placeholder="Large · 44" />
+  <input class="input" placeholder="Default · 36" />
+  <input class="input input--sm" placeholder="Small · 32" />
+</div>
+
+<p class="sub-label">Shape — default 6px corner vs. fully rounded</p>
+<div class="panel" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+  <input class="input" placeholder="Default — radius 6" />
+  <input class="input input--round" placeholder="Round — pill" />
+  <div class="input-group">
+    <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="input input--round" placeholder="검색" style="width: 280px;" />
+  </div>
+</div>
+
+<p class="sub-label">States</p>
+<div class="panel" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+  <div class="field">
+    <label>Default</label>
+    <input class="input" placeholder="Type here" />
+    <span class="help">Resting state.</span>
+  </div>
+  <div class="field">
+    <label>Focus</label>
+    <input class="input is-focus" value="셀바스 AI" />
+    <span class="help">Lime ring + lime border.</span>
+  </div>
+  <div class="field">
+    <label>Disabled</label>
+    <input class="input" value="Cannot edit" disabled />
+    <span class="help">Slate-100 fill.</span>
+  </div>
+  <div class="field">
+    <label>Error</label>
+    <input class="input input--error" value="" placeholder="필수 항목" />
+    <span class="help help--error">모델 이름을 입력해 주세요.</span>
+  </div>
+</div>
+
+<!-- =============================================================== SELECTION -->
+<p class="group-label">Selection — checkbox, radio, switch (with focus)</p>
+<div class="panel" style="display: flex; gap: 32px; align-items: center; flex-wrap: wrap;">
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="checkbox checked"></span> Checked</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="checkbox"></span> Unchecked</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="checkbox checked is-focus"></span> Focus</label>
+  <span style="width: 16px;"></span>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="radio checked"></span> Selected</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="radio"></span> Unselected</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="radio checked is-focus"></span> Focus</label>
+  <span style="width: 16px;"></span>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="switch on" onclick="this.classList.toggle('on')"></span> On</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="switch" onclick="this.classList.toggle('on')"></span> Off</label>
+  <label style="display:flex; align-items:center; gap: 8px; font-size: 14px;"><span class="switch on is-focus"></span> Focus</label>
+</div>
+
+<!-- =============================================================== TABS -->
+<p class="group-label">Tabs — segmented &amp; underline</p>
+
+<p class="sub-label">Segmented (compact, settings + toolbars)</p>
+<div class="panel" style="display: flex; gap: 24px; flex-wrap: wrap;">
+  <div class="tabs-segmented">
+    <button class="active">Overview</button>
+    <button>음성</button>
+    <button>필기</button>
+    <button>영상</button>
+  </div>
+  <div class="tabs-segmented">
+    <button class="active"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Grid</button>
+    <button><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>List</button>
+    <button><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>Board</button>
+  </div>
+</div>
+
+<p class="sub-label">Underline (page-level navigation)</p>
+<div class="panel">
+  <div class="tabs-underline">
+    <button class="active">Overview <span class="count">12</span></button>
+    <button>모델 <span class="count">38</span></button>
+    <button>API 키 <span class="count">4</span></button>
+    <button>사용량</button>
+    <button>요금제</button>
+  </div>
+</div>
+
+<!-- =============================================================== BADGE -->
+<p class="group-label">Badges</p>
+<div class="panel" style="display: flex; gap: 12px; flex-wrap: wrap;">
+  <span class="badge badge--primary"><span class="dot"></span>Primary</span>
+  <span class="badge badge--success"><span class="dot"></span>Success</span>
+  <span class="badge badge--warning"><span class="dot"></span>Warning</span>
+  <span class="badge badge--error"><span class="dot"></span>Error</span>
+  <span class="badge badge--info"><span class="dot"></span>Info</span>
+  <span class="badge badge--neutral">Neutral</span>
+</div>
+
+<!-- =============================================================== CARD -->
+<p class="group-label">Card</p>
+<div class="row">
+  <div class="card">
+    <div class="meta"><span class="badge badge--success"><span class="dot"></span>Live</span><span>음성 합성</span></div>
+    <h3 class="t-heading-sm">SELVAS TTS v3.2</h3>
+    <p>한국어 자연 발화에 최적화된 음성 합성 엔진. 8kHz / 24kHz 듀얼 출력 지원.</p>
+    <div style="display: flex; gap: 8px; margin-top: 16px;">
+      <button class="btn btn--sm btn--primary">시작하기</button>
+      <button class="btn btn--sm btn--outline">문서</button>
+    </div>
+  </div>
+  <div class="card" style="background: #020617; color: white; border-color: #1E293B;">
+    <div class="meta" style="color: #94A3B8;">
+      <span class="badge" style="background: var(--color-primary-500); color: #0A0A0A;">Beta</span>
+      <span>필기지능</span>
+    </div>
+    <h3 class="t-heading-sm" style="color: white;">Handwriting OCR</h3>
+    <p style="color: #94A3B8;">학습 노트와 의료 차트의 손글씨를 96% 정확도로 인식합니다.</p>
+    <div style="display: flex; gap: 8px; margin-top: 16px;">
+      <button class="btn btn--sm btn--primary">데모</button>
+      <button class="btn btn--sm" style="background: transparent; color: white; border: 1px solid #334155;">자세히</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

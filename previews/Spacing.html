@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Spacing, Radius, Shadow — SELVAS AI</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { background: var(--bg-canvas); padding: 56px 64px; margin: 0;
+         max-width: 1180px; }
+  .card-header { padding-bottom: 32px; border-bottom: 1px solid var(--border-default);
+                 margin-bottom: 40px; }
+  .eyebrow { font: 500 12px/1 var(--font-ui); letter-spacing: 0.12em;
+             text-transform: uppercase; color: var(--primary-text); margin: 0 0 12px; }
+  .group-label { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+                 letter-spacing: 0.08em; text-transform: uppercase; margin: 40px 0 16px; }
+
+  /* spacing */
+  .space-row { display: grid;
+               grid-template-columns: 88px 1fr 100px;
+               align-items: center;
+               padding: 12px 0;
+               border-bottom: 1px dashed var(--border-subtle); }
+  .space-row .name { font: 600 14px/1 var(--font-ui); }
+  .space-row .bar { height: 16px; background: var(--primary); border-radius: 4px; }
+  .space-row .px { font: 500 13px/1 var(--font-mono); color: var(--fg-muted);
+                   text-align: right; }
+
+  /* radius */
+  .radii { display: grid; grid-template-columns: repeat(8, 1fr); gap: 16px; }
+  .radius-card { background: var(--bg-subtle); border: 1px solid var(--border-default);
+                 height: 96px; display: flex; flex-direction: column;
+                 align-items: center; justify-content: flex-end; padding: 12px; }
+  .radius-card span { font: 600 12px/1 var(--font-ui); color: var(--fg-default); }
+  .radius-card small { font: 500 11px/1 var(--font-mono); color: var(--fg-muted);
+                       margin-top: 4px; }
+
+  /* shadow */
+  .shadows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+             background: var(--bg-subtle); padding: 40px; border-radius: var(--radius-lg); }
+  .shadow-card { background: white; height: 110px; border-radius: var(--radius-md);
+                 display: flex; flex-direction: column; align-items: center;
+                 justify-content: center; gap: 4px; }
+  .shadow-card span { font: 600 14px/1 var(--font-ui); }
+  .shadow-card small { font: 500 11px/1 var(--font-mono); color: var(--fg-muted); }
+
+  /* motion */
+  .motion-row { display: flex; align-items: center; gap: 24px;
+                padding: 14px 0; border-bottom: 1px dashed var(--border-subtle); }
+  .motion-row .name { width: 180px; font: 600 14px/1 var(--font-ui); }
+  .motion-row .desc { color: var(--fg-muted); font-size: 14px; }
+  .motion-row .ease-curve { width: 80px; height: 40px; }
+</style>
+</head>
+<body>
+
+<header class="card-header">
+  <p class="eyebrow">Design System · Spacing</p>
+  <h1 class="t-display-sm">Layout tokens</h1>
+  <p class="t-body-lg" style="color: var(--fg-muted); margin: 12px 0 0; max-width: 640px;">
+    Spacing, radii, shadows, motion — the structural primitives that hold
+    information groups together.
+  </p>
+</header>
+
+<p class="group-label">Spacing scale</p>
+<div id="spacing"></div>
+
+<p class="group-label">Border radius</p>
+<div class="radii">
+  <div class="radius-card" style="border-radius:2px"><span>xs</span><small>2</small></div>
+  <div class="radius-card" style="border-radius:4px"><span>sm</span><small>4</small></div>
+  <div class="radius-card" style="border-radius:6px"><span>md</span><small>6 · default</small></div>
+  <div class="radius-card" style="border-radius:8px"><span>lg</span><small>8</small></div>
+  <div class="radius-card" style="border-radius:12px"><span>xl</span><small>12</small></div>
+  <div class="radius-card" style="border-radius:16px"><span>2xl</span><small>16</small></div>
+  <div class="radius-card" style="border-radius:24px"><span>3xl</span><small>24</small></div>
+  <div class="radius-card" style="border-radius:9999px"><span>full</span><small>pill</small></div>
+</div>
+
+<p class="group-label">Shadows</p>
+<div class="shadows">
+  <div class="shadow-card" style="box-shadow: var(--shadow-xs)"><span>xs</span><small>subtle separation</small></div>
+  <div class="shadow-card" style="box-shadow: var(--shadow-sm)"><span>sm</span><small>resting card</small></div>
+  <div class="shadow-card" style="box-shadow: var(--shadow-md)"><span>md</span><small>hover / popover</small></div>
+  <div class="shadow-card" style="box-shadow: var(--shadow-lg)"><span>lg</span><small>menu / dialog</small></div>
+  <div class="shadow-card" style="box-shadow: var(--shadow-xl)"><span>xl</span><small>floating</small></div>
+  <div class="shadow-card" style="box-shadow: var(--shadow-2xl)"><span>2xl</span><small>modal overlay</small></div>
+</div>
+
+<p class="group-label">Motion</p>
+<div>
+  <div class="motion-row"><div class="name">duration-instant · 80ms</div><div class="desc">tap state acknowledgement</div></div>
+  <div class="motion-row"><div class="name">duration-fast · 150ms</div><div class="desc">menus, tooltips</div></div>
+  <div class="motion-row"><div class="name">duration-base · 200ms</div><div class="desc">most UI transitions</div></div>
+  <div class="motion-row"><div class="name">duration-slow · 320ms</div><div class="desc">page-level transitions</div></div>
+  <div class="motion-row"><div class="name">ease-standard</div><div class="desc">cubic-bezier(0.2, 0, 0, 1) — default for almost everything</div></div>
+  <div class="motion-row" style="border-bottom: 0;"><div class="name">ease-out / ease-in</div><div class="desc">enter / exit pairs</div></div>
+</div>
+
+<script>
+const spacing = [
+  ["2xs", 2], ["xs", 4], ["s", 8], ["md", 12], ["lg", 16],
+  ["xl", 20], ["2xl", 24], ["3xl", 32], ["4xl", 48], ["5xl", 64],
+];
+const host = document.getElementById("spacing");
+for (const [name, px] of spacing) {
+  const row = document.createElement("div");
+  row.className = "space-row";
+  row.innerHTML =
+    `<div class="name">${name}</div>` +
+    `<div><div class="bar" style="width:${px}px"></div></div>` +
+    `<div class="px">${px}px</div>`;
+  host.appendChild(row);
+}
+</script>
+
+</body>
+</html>

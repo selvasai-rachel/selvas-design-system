@@ -1,0 +1,368 @@
+/* =====================================================================
+   SELVAS AI — Design System tokens
+   Based on Tailwind v4 + shadcn/ui, with SELVAS-specific brand colors.
+   ===================================================================== */
+
+/* Pretendard — local brand files, full weight range. */
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 100;
+  font-display: swap; src: url("fonts/Pretendard-Thin.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 200;
+  font-display: swap; src: url("fonts/Pretendard-ExtraLight.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 300;
+  font-display: swap; src: url("fonts/Pretendard-Light.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 400;
+  font-display: swap; src: url("fonts/Pretendard-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 500;
+  font-display: swap; src: url("fonts/Pretendard-Medium.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 600;
+  font-display: swap; src: url("fonts/Pretendard-SemiBold.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 700;
+  font-display: swap; src: url("fonts/Pretendard-Bold.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 800;
+  font-display: swap; src: url("fonts/Pretendard-ExtraBold.ttf") format("truetype"); }
+@font-face { font-family: "Pretendard"; font-style: normal; font-weight: 900;
+  font-display: swap; src: url("fonts/Pretendard-Black.ttf") format("truetype"); }
+
+/* Inter (English chrome) + Geist Mono (code) still come from Google Fonts. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ---------------------------------------------------------------- *
+   * 1.  COLOR TOKENS                                                  *
+   * ---------------------------------------------------------------- */
+
+  /* Primary — Lime Green (brand). Tailwind "lime" tuned to SELVAS base
+     #87C82F.  Use for primary CTAs, focus accents, brand marks.         */
+  --color-primary-50:  #F6FBEA;
+  --color-primary-100: #E9F6D1;
+  --color-primary-200: #D2EBA6;
+  --color-primary-300: #B7DD75;
+  --color-primary-400: #9ED14E;
+  --color-primary-500: #87C82F; /* Base */
+  --color-primary-600: #6CA823; /* Text on light surfaces */
+  --color-primary-700: #56861E;
+  --color-primary-800: #436820;
+  --color-primary-900: #3A571F;
+  --color-primary-950: #1F3010;
+
+  /* Secondary — Slate Blue.  Used for secondary actions, dark surfaces. */
+  --color-secondary-50:  #F3F7F8;
+  --color-secondary-100: #E1ECF0;
+  --color-secondary-200: #C2D7E0;
+  --color-secondary-300: #97B8C7;
+  --color-secondary-400: #6B95A9;
+  --color-secondary-500: #517A90;
+  --color-secondary-600: #466578;
+  --color-secondary-700: #384F5E; /* Base — buttons, dark chrome */
+  --color-secondary-800: #2C3F4A; /* Text */
+  --color-secondary-900: #243440;
+  --color-secondary-950: #131C24;
+
+  /* Slate Gray — neutral text + chrome (Tailwind slate). */
+  --color-slate-50:  #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
+  --color-slate-950: #020617;
+
+  /* Cool Gray — alternate neutral with cooler bias. */
+  --color-coolgray-50:  #F3F7FC;
+  --color-coolgray-100: #E5EDF3;
+  --color-coolgray-200: #CBD8E1;
+  --color-coolgray-300: #A3B5C2;
+  --color-coolgray-400: #6F8497;
+  --color-coolgray-500: #4F6478;
+  --color-coolgray-600: #3F5263;
+  --color-coolgray-700: #344350;
+  --color-coolgray-800: #2A363F;
+  --color-coolgray-900: #1F272E;
+  --color-coolgray-950: #0F1418;
+
+  /* True gray — semantic neutral. */
+  --color-gray-50:  #FAFAFA;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #E5E5E5;
+  --color-gray-300: #D4D4D4;
+  --color-gray-400: #A3A3A3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+  --color-gray-950: #0A0A0A;
+
+  /* Semantic — Tailwind v4 defaults */
+  --color-red-50:  #FEF2F2;
+  --color-red-100: #FEE2E2;
+  --color-red-200: #FECACA;
+  --color-red-300: #FCA5A5;
+  --color-red-400: #F87171;
+  --color-red-500: #EF4444;
+  --color-red-600: #DC2626; /* Destructive base */
+  --color-red-700: #B91C1C;
+  --color-red-800: #991B1B;
+  --color-red-900: #7F1D1D;
+  --color-red-950: #450A0A;
+
+  --color-yellow-50:  #FEFCE8;
+  --color-yellow-100: #FEF9C3;
+  --color-yellow-200: #FEF08A;
+  --color-yellow-300: #FACC15; /* Warning base */
+  --color-yellow-400: #EAB308;
+  --color-yellow-500: #CA8A04;
+  --color-yellow-600: #A16207;
+  --color-yellow-700: #854D0E;
+  --color-yellow-800: #713F12;
+  --color-yellow-900: #422006;
+  --color-yellow-950: #1A1303;
+
+  --color-green-50:  #F0FDF4;
+  --color-green-100: #DCFCE7;
+  --color-green-200: #BBF7D0;
+  --color-green-300: #86EFAC;
+  --color-green-400: #4ADE80;
+  --color-green-500: #22C55E; /* Success base */
+  --color-green-600: #16A34A;
+  --color-green-700: #15803D;
+  --color-green-800: #166534;
+  --color-green-900: #14532D;
+  --color-green-950: #052E16;
+
+  --color-blue-50:  #EFF6FF;
+  --color-blue-100: #DBEAFE;
+  --color-blue-200: #BFDBFE;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #2563EB; /* Info base */
+  --color-blue-700: #1D4ED8;
+  --color-blue-800: #1E40AF;
+  --color-blue-900: #1E3A8A;
+  --color-blue-950: #172554;
+
+  /* ---------------------------------------------------------------- *
+   * 2.  SEMANTIC COLOR ALIASES                                        *
+   * ---------------------------------------------------------------- */
+  --bg-canvas:        #FFFFFF;
+  --bg-subtle:        var(--color-slate-50);
+  --bg-muted:         var(--color-slate-100);
+  --bg-inverse:       var(--color-slate-950);
+
+  --fg-default:       var(--color-slate-950); /* main copy */
+  --fg-muted:         var(--color-slate-600); /* secondary copy */
+  --fg-subtle:        var(--color-slate-500); /* hints, captions */
+  --fg-disabled:      var(--color-slate-400);
+  --fg-inverse:       #FFFFFF;
+  --fg-on-primary:    #0A0A0A; /* black text on lime primary */
+
+  --border-default:   var(--color-slate-200);
+  --border-strong:    var(--color-slate-300);
+  --border-subtle:    var(--color-slate-100);
+
+  --primary:          var(--color-primary-500);
+  --primary-text:     var(--color-primary-600);
+  --primary-hover:    var(--color-primary-600);
+  --primary-active:   var(--color-primary-700);
+  --primary-soft:     var(--color-primary-50);
+
+  --secondary:        var(--color-secondary-700);
+  --secondary-hover:  var(--color-secondary-800);
+  --secondary-active: var(--color-secondary-900);
+
+  --destructive:      var(--color-red-600);
+  --destructive-hover:var(--color-red-700);
+  --warning:          var(--color-yellow-300);
+  --success:          var(--color-green-500);
+  --info:             var(--color-blue-600);
+
+  /* Focus rings */
+  --ring-default: 0 0 0 3px rgb(135 200 47 / 0.45);
+  --ring-error:   0 0 0 3px rgb(220 38 38 / 0.35);
+  --ring-sidebar: 0 0 0 3px rgb(56 79 94 / 0.30);
+
+  /* ---------------------------------------------------------------- *
+   * 3.  TYPOGRAPHY                                                    *
+   * ---------------------------------------------------------------- */
+  --font-sans:    "Pretendard", "Inter", -apple-system, BlinkMacSystemFont,
+                   "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-display: "Pretendard", "Inter", system-ui, sans-serif;
+  --font-ui:      "Inter", "Pretendard", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", "JetBrains Mono", "SF Mono",
+                  ui-monospace, monospace;
+
+  /* Type scale — PC sizes.  All weights are 700 (Bold).
+     Display uses absolute px line-height + spacing.
+     Heading + Body use 140% line-height + 140% letter-spacing rule. */
+  --text-display-lg-size:    72px; --text-display-lg-lh:    96px; --text-display-lg-spacing: 20px;
+  --text-display-md-size:    48px; --text-display-md-lh:    64px; --text-display-md-spacing: 16px;
+  --text-display-sm-size:    32px; --text-display-sm-lh:    44px; --text-display-sm-spacing: 12px;
+
+  --text-heading-xl-size:    48px; --text-heading-xl-lh:    1.4;
+  --text-heading-lg-size:    32px; --text-heading-lg-lh:    1.4;
+  --text-heading-md-size:    24px; --text-heading-md-lh:    1.4;
+  --text-heading-sm-size:    20px; --text-heading-sm-lh:    1.4;
+  --text-heading-xs-size:    18px; --text-heading-xs-lh:    1.4;
+  --text-heading-xxs-size:   16px; --text-heading-xxs-lh:   1.4;
+
+  --text-body-lg-size:       20px; --text-body-lg-lh:       1.4;
+  --text-body-md-size:       16px; --text-body-md-lh:       1.4;
+  --text-body-sm-size:       14px; --text-body-sm-lh:       1.4;
+  --text-body-xs-size:       12px; --text-body-xs-lh:       1.4;
+
+  --tracking-tight:  -0.02em;
+  --tracking-snug:   -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:    0.005em;
+
+  /* ---------------------------------------------------------------- *
+   * 4.  SPACING — t-shirt scale                                       *
+   * ---------------------------------------------------------------- */
+  --space-2xs: 2px;
+  --space-xs:  4px;
+  --space-s:   8px;
+  --space-md:  12px;
+  --space-lg:  16px;
+  --space-xl:  20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 48px;
+  --space-5xl: 64px;
+
+  /* ---------------------------------------------------------------- *
+   * 5.  RADIUS                                                        *
+   * ---------------------------------------------------------------- */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;   /* default — buttons, inputs */
+  --radius-lg:   8px;   /* cards */
+  --radius-xl:   12px;  /* large cards */
+  --radius-2xl:  16px;
+  --radius-3xl:  24px;
+  --radius-full: 9999px;
+
+  /* ---------------------------------------------------------------- *
+   * 6.  SHADOWS                                                       *
+   * ---------------------------------------------------------------- */
+  --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.10), 0 2px 4px -2px rgb(0 0 0 / 0.10);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.10), 0 4px 6px -4px rgb(0 0 0 / 0.10);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.10);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* ---------------------------------------------------------------- *
+   * 7.  MOTION                                                        *
+   * ---------------------------------------------------------------- */
+  --ease-standard:  cubic-bezier(0.2, 0, 0, 1);
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --duration-instant: 80ms;
+  --duration-fast:    150ms;
+  --duration-base:    200ms;
+  --duration-slow:    320ms;
+}
+
+/* ====================================================================
+   Dark mode — semantic tokens flip; ramp values stay constant.
+   Apply `.theme-dark` to any container (or <html>) to opt in.
+   ==================================================================== */
+:root.theme-dark,
+.theme-dark {
+  --bg-canvas:        #0B1117;            /* near slate-950 */
+  --bg-subtle:        #0F172A;            /* slate-900 */
+  --bg-muted:         #1E293B;            /* slate-800 */
+  --bg-inverse:       #FFFFFF;
+
+  --fg-default:       #F1F5F9;            /* slate-100 */
+  --fg-muted:         #94A3B8;            /* slate-400 */
+  --fg-subtle:        #64748B;            /* slate-500 */
+  --fg-disabled:      #475569;
+  --fg-inverse:       #0F172A;
+  --fg-on-primary:    #0A0A0A;            /* lime stays bright; black still works */
+
+  --border-default:   #1E293B;            /* slate-800 */
+  --border-strong:    #334155;            /* slate-700 */
+  --border-subtle:    #172033;
+
+  /* Brand colors brighten 1 step for dark backgrounds */
+  --primary:          var(--color-primary-400);   /* #9ED14E */
+  --primary-text:     var(--color-primary-300);
+  --primary-hover:    var(--color-primary-300);
+  --primary-active:   var(--color-primary-200);
+  --primary-soft:     #1F3010;                    /* primary-950 — soft tint */
+
+  --secondary:        var(--color-secondary-400);
+  --secondary-hover:  var(--color-secondary-300);
+  --secondary-active: var(--color-secondary-200);
+
+  --destructive:      var(--color-red-400);
+  --destructive-hover:var(--color-red-300);
+  --warning:          var(--color-yellow-300);
+  --success:          var(--color-green-400);
+  --info:             var(--color-blue-400);
+
+  --ring-default: 0 0 0 3px rgb(158 209 78 / 0.45);
+  --ring-error:   0 0 0 3px rgb(248 113 113 / 0.40);
+  --ring-sidebar: 0 0 0 3px rgb(151 184 199 / 0.35);
+
+  --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.55), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.8);
+}
+
+/* ====================================================================
+   Semantic element styles — apply directly to HTML
+   ==================================================================== */
+html { font-family: var(--font-sans); color: var(--fg-default); -webkit-font-smoothing: antialiased; }
+
+.t-display-lg { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-display-lg-size); line-height: var(--text-display-lg-lh);
+  letter-spacing: var(--text-display-lg-spacing); color: var(--fg-default); }
+.t-display-md { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-display-md-size); line-height: var(--text-display-md-lh);
+  letter-spacing: var(--text-display-md-spacing); }
+.t-display-sm { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-display-sm-size); line-height: var(--text-display-sm-lh);
+  letter-spacing: var(--text-display-sm-spacing); }
+
+.t-heading-xl    { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-xl-size); line-height: var(--text-heading-xl-lh); }
+.t-heading-lg, h1 { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-lg-size); line-height: var(--text-heading-lg-lh); color: var(--fg-default); }
+.t-heading-md, h2 { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-md-size); line-height: var(--text-heading-md-lh); }
+.t-heading-sm, h3 { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-sm-size); line-height: var(--text-heading-sm-lh); }
+.t-heading-xs, h4 { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-xs-size); line-height: var(--text-heading-xs-lh); }
+.t-heading-xxs, h5 { font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-heading-xxs-size); line-height: var(--text-heading-xxs-lh); }
+
+.t-body-lg  { font-size: var(--text-body-lg-size);  line-height: var(--text-body-lg-lh); }
+.t-body-md, p { font-size: var(--text-body-md-size); line-height: var(--text-body-md-lh);
+  color: var(--fg-default); }
+.t-body-sm  { font-size: var(--text-body-sm-size);  line-height: var(--text-body-sm-lh);
+  color: var(--fg-muted); }
+.t-body-xs  { font-size: var(--text-body-xs-size);  line-height: var(--text-body-xs-lh);
+  color: var(--fg-subtle); }
+
+code, .t-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-muted);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+button { font-family: var(--font-ui); }
+input, textarea, select { font-family: var(--font-ui); }

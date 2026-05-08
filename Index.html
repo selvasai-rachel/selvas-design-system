@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>SELVAS AI — Design System</title>
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  body { background: var(--bg-subtle); margin: 0; min-height: 100vh; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 64px 48px 96px; }
+
+  header.hero {
+    background: #050505;
+    color: white;
+    border-radius: var(--radius-2xl);
+    padding: 56px 56px 64px;
+    margin-bottom: 40px;
+    position: relative; overflow: hidden;
+    isolation: isolate;
+  }
+  /* Single 45° gradient beam in TL + BR. Far end fades fully transparent
+     well before the rect edge — beam reads as continuous flow with no end. */
+  .hero-bars { position: absolute; inset: 0; pointer-events: none;
+               z-index: 0; overflow: hidden; }
+  .hero-bars .beam { position: absolute; }
+  /* Crossed beams whose CENTERS land in the bottom-right area.
+     Each beam is a long rect, centered at (right 12%, bottom 18%)
+     using translate(50%,50%), rotated to ±45°. Both ends fade fully
+     to transparent so the beams read as continuous flow. */
+  .hero-bars .beam {
+    position: absolute;
+    width: 1800px; height: 240px;
+    right: 12%; bottom: 18%;
+    transform-origin: center;
+  }
+  .hero-bars .br {
+    background: linear-gradient(90deg,
+      rgba(42,201,163,0)    0%,
+      rgba(42,201,163,0)   28%,
+      rgba(42,201,163,0.55) 44%,
+      #2AC9A3              50%,
+      rgba(42,201,163,0.55) 56%,
+      rgba(42,201,163,0)   72%,
+      rgba(42,201,163,0)  100%);
+    transform: translate(50%, 50%) rotate(-45deg);
+    opacity: 0.70;
+  }
+  .hero-bars .br-x {
+    background: linear-gradient(90deg,
+      rgba(135,200,47,0)    0%,
+      rgba(135,200,47,0)   28%,
+      rgba(135,200,47,0.55) 44%,
+      #87C82F              50%,
+      rgba(135,200,47,0.55) 56%,
+      rgba(135,200,47,0)   72%,
+      rgba(135,200,47,0)  100%);
+    transform: translate(50%, 50%) rotate(45deg);
+    opacity: 0.65;
+  }
+  header.hero > *:not(.hero-bars) { position: relative; z-index: 1; }
+  .hero-ci { display: inline-flex; align-items: center;
+             margin-bottom: 24px; }
+  .hero-ci img { height: 26px; width: auto; display: block; }
+  header.hero h1 { color: white; margin: 12px 0 14px;
+                   letter-spacing: -0.01em; }
+  header.hero p { color: rgba(255,255,255,0.72); max-width: 620px;
+                  font-size: 17px; line-height: 1.55; margin: 0; }
+  .hero-tokens { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .hero-tokens .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    font: 500 13px/1 var(--font-mono); color: white;
+    backdrop-filter: blur(8px);
+  }
+  .hero-tokens .chip .muted { color: rgba(255,255,255,0.5); }
+  .hero-tokens .chip .sw { width: 22px; height: 22px; border-radius: 50%; }
+
+  .group-label { font: 500 12px/1 var(--font-ui); color: var(--fg-muted);
+                 letter-spacing: 0.08em; text-transform: uppercase;
+                 margin: 0 0 16px; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  a.tile {
+    background: white;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 28px; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color 150ms var(--ease-standard),
+                box-shadow 150ms var(--ease-standard),
+                transform 150ms var(--ease-standard);
+  }
+  a.tile:hover { border-color: var(--primary);
+                 box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+  a.tile .label { font: 500 12px/1 var(--font-ui); color: var(--primary-text);
+                  letter-spacing: 0.08em; text-transform: uppercase; }
+  a.tile h3 { margin: 0; font: 700 22px/1.25 var(--font-display);
+              letter-spacing: -0.01em; }
+  a.tile p  { margin: 4px 0 0; color: var(--fg-muted); font-size: 14px;
+              line-height: 1.5; }
+  a.tile .arrow { margin-top: 12px; font: 500 13px/1 var(--font-ui);
+                  color: var(--fg-default); }
+  a.tile.feature {
+    grid-column: span 2;
+    background: white;
+    display: grid; grid-template-columns: 2fr 1fr; gap: 32px;
+    align-items: center;
+  }
+  a.tile.feature .preview {
+    background: var(--bg-subtle); border-radius: var(--radius-md);
+    height: 200px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-subtle);
+  }
+  a.tile.feature .preview .mock {
+    width: 80%; aspect-ratio: 16/9; background: white; border-radius: 6px;
+    border: 1px solid var(--border-default); box-shadow: var(--shadow-sm);
+    display: grid; grid-template-columns: 30% 1fr; overflow: hidden;
+  }
+  a.tile.feature .preview .mock .side { background: white;
+    border-right: 1px solid var(--border-subtle); padding: 8px; }
+  a.tile.feature .preview .mock .side div {
+    height: 6px; background: var(--bg-muted); border-radius: 3px; margin-bottom: 4px; }
+  a.tile.feature .preview .mock .side div:nth-child(1) { background: var(--color-primary-200); }
+  a.tile.feature .preview .mock .body { background: var(--bg-subtle); padding: 8px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+    grid-auto-rows: 14px; }
+  a.tile.feature .preview .mock .body div { background: white; border-radius: 2px; }
+  a.tile.feature .preview .mock .body div:first-child { background: var(--primary); }
+
+  /* footer */
+  footer { margin-top: 48px; padding-top: 32px;
+           border-top: 1px solid var(--border-default);
+           color: var(--fg-muted); font-size: 13px; line-height: 1.6; }
+  footer code { font-size: 12px; }
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#050505">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#050505"/>
+    <g transform="translate(600 400)">
+      <rect x="-260" y="-90" width="520" height="180" rx="24" fill="none" stroke="#87C82F" stroke-width="6"/>
+      <text x="0" y="18" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="86" fill="#87C82F" text-anchor="middle" letter-spacing="-2">SELVAS</text>
+    </g>
+  </svg>
+</template>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-bars" aria-hidden="true">
+      <span class="beam br"></span>
+      <span class="beam br-x"></span>
+    </div>
+    <div class="hero-ci">
+      <img src="assets/selvas-logo-dark.svg" alt="SELVAS AI" />
+    </div>
+    <h1 class="t-heading-xl" style="font-size: 44px;"><span style="color: var(--primary);">SELVAS AI</span> Design System</h1>
+    <p>음성·필기·영상 인텔리전스를 위한 시각 언어. Tailwind v4 + shadcn/ui 위에 라임 그린과 슬레이트 블루를 더한, 모던하고 명확한 디자인 시스템.</p>
+    <div class="hero-tokens">
+      <span class="chip"><span class="sw" style="background: var(--primary); border: 1px solid rgba(15,31,10,0.12);"></span>Primary &nbsp;<span class="muted">#87C82F</span></span>
+      <span class="chip"><span class="sw" style="background: var(--secondary);"></span>Secondary &nbsp;<span class="muted">#384F5E</span></span>
+      <span class="chip"><span class="sw" style="background: white; border: 1px solid rgba(15,31,10,0.12);"></span>Pretendard &nbsp;<span class="muted">primary type</span></span>
+    </div>
+  </header>
+
+  <p class="group-label">Foundations</p>
+  <div class="card-grid">
+    <a class="tile" href="previews/Type.html">
+      <span class="label">Type</span>
+      <h3>Typography</h3>
+      <p>Display, heading, body, mono — Pretendard for Korean + Latin, Inter for English chrome.</p>
+      <span class="arrow">View specimen →</span>
+    </a>
+    <a class="tile" href="previews/Colors.html">
+      <span class="label">Colors</span>
+      <h3>Color system</h3>
+      <p>Brand, neutrals, semantic — 11-step ramps with Base + Text tags.</p>
+      <span class="arrow">View ramps →</span>
+    </a>
+    <a class="tile" href="previews/Spacing.html">
+      <span class="label">Spacing</span>
+      <h3>Spacing, radii, shadows, motion</h3>
+      <p>The structural primitives: t-shirt spacing scale, 8 radius steps, 6 shadow levels.</p>
+      <span class="arrow">View tokens →</span>
+    </a>
+    <a class="tile" href="previews/Brand.html">
+      <span class="label">Brand</span>
+      <h3>Brand &amp; voice</h3>
+      <p>Logo placeholder, the three intelligences, voice &amp; tone, color recipe.</p>
+      <span class="arrow">View brand →</span>
+    </a>
+  </div>
+
+  <p class="group-label" style="margin-top: 40px;">Components &amp; surfaces</p>
+  <div class="card-grid">
+    <a class="tile" href="previews/Components.html">
+      <span class="label">Components</span>
+      <h3>Core components</h3>
+      <p>Buttons, inputs, switches, tabs, badges, cards — the shadcn-derived primitives in SELVAS skin.</p>
+      <span class="arrow">View library →</span>
+    </a>
+    <a class="tile feature" href="SELVAS AI UI Kit.html">
+      <div>
+        <span class="label">UI Kit</span>
+        <h3 style="margin-top: 10px;">SELVAS Console — sample dashboard</h3>
+        <p>Sidebar, top bar, stats, charts, model table, system status.  A worked example of the system applied to a real product surface.</p>
+        <span class="arrow">Open kit →</span>
+      </div>
+      <div class="preview">
+        <div class="mock">
+          <div class="side"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="body">
+            <div></div><div></div><div></div>
+            <div></div><div></div><div></div>
+            <div></div><div></div><div></div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <strong style="color: var(--fg-default);">Wiring it up.</strong>
+    Drop the token sheet at the top of any prototype: <code>&lt;link rel="stylesheet" href="colors_and_type.css"&gt;</code>.
+    Use CSS custom properties — never hand-paste hex values. Read <code>SKILL.md</code> for the full editorial brief and <code>README.md</code> for the file map.
+  </footer>
+
+</div>
+</body>
+</html>
